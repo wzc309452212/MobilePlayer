@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">MobilePlayer</string>
+    <string name="starting">启动中...</string>
+</resources>
