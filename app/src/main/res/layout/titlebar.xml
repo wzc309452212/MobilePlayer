@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<View.TitleBar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:gravity="center_vertical"
+    android:background="#ff3097fd"
+    >
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/tengxun"
+        android:layout_marginLeft="8dp"/>
+
+    <TextView
+        android:gravity="center_vertical"
+        android:id="@+id/tv_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="全网搜索"
+        android:textSize="14sp"
+        android:drawableLeft="@drawable/tv_search_drawable_selector"
+        android:drawablePadding="3dp"
+        android:layout_marginLeft="5dp"
+        android:layout_weight="1"
+        android:background="@drawable/tv_search_bg_selector"
+        android:textColor="@drawable/tv_search_textcolor_selector"
+        android:clickable="true"
+        />
+
+    <RelativeLayout
+        android:id="@+id/rl_game"
+        android:layout_marginLeft="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/btn_downloading"
+            />
+        <ImageView
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:background="@drawable/dot"
+            android:layout_alignRight="@+id/tv_game"
+            />
+    </RelativeLayout>
+    <ImageView
+        android:id="@+id/iv_record"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="8dp"
+        android:src="@drawable/btn_history"
+        />
+
+</View.TitleBar>

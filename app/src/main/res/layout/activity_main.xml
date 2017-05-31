@@ -5,6 +5,7 @@
 
 
     <!--标题栏-->
+    <include layout="@layout/titlebar" />
 
     <!--FrameLayout-->
     <FrameLayout

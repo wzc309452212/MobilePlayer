@@ -70,6 +70,7 @@ public class MainActivity extends FragmentActivity{
         rg_bottom_tag.check(R.id.rb_video);
 
 
+
     }
     class MyOnCheckedChangeListener implements RadioGroup.OnCheckedChangeListener{
 
@@ -88,7 +89,6 @@ public class MainActivity extends FragmentActivity{
                 case R.id.rb_net_audio:
                     position = 3;
                     break;
-
             }
             setFragment();
 
@@ -131,6 +131,5 @@ public class MainActivity extends FragmentActivity{
         }
         return basePager;
     }
-
 
 }
