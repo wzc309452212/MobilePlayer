@@ -41,6 +41,7 @@ public class SystemVideoPlayer extends Activity {
             videoview.setVideoURI(uri);
         }
 
+        // 设置控制面板
         videoview.setMediaController(new android.widget.MediaController(this));
 
 
@@ -71,9 +72,5 @@ public class SystemVideoPlayer extends Activity {
             Toast.makeText(SystemVideoPlayer.this, "播放完成了"+uri, Toast.LENGTH_SHORT).show();
         }
     }
-
-//    // 设置控制面板
-//    videoview.setMediaController(new MediaController(this));
-
 
 }
