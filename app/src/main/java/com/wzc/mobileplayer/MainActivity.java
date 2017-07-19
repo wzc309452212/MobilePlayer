@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,6 +55,8 @@ public class MainActivity extends FragmentActivity{
 //        textView.setTextSize(30);
 //        textView.setGravity(Gravity.CENTER);
 //        textView.setTextColor(Color.RED);
+
+        Log.e("TAG","onCreate");
 
           isGrantExternalRW(this);
 
@@ -159,4 +162,9 @@ public class MainActivity extends FragmentActivity{
         return basePager;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.e("TAG","onDestroy");
+    }
 }
