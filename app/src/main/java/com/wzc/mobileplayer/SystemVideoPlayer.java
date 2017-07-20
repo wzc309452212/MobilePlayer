@@ -1,11 +1,14 @@
 package com.wzc.mobileplayer;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.session.MediaController;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -16,12 +19,20 @@ import android.widget.VideoView;
 public class SystemVideoPlayer extends Activity {
     // 重写方法 去注册（新版本AS去哪注册啊）
 
+    private static final String TAG = SystemVideoPlayer.class.getSimpleName(); // "SystemVideoPlayerActivity"
+
+
+
+
     private VideoView videoview;
     private Uri uri;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.e(TAG,"onCreate");
+
         setContentView(R.layout.activity_system_video_player);
 
         videoview = (VideoView) findViewById(R.id.videoview);
@@ -83,4 +94,45 @@ public class SystemVideoPlayer extends Activity {
         }
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.e(TAG,"onRestart");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.e(TAG,"onStart");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e(TAG,"onResume");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.e(TAG,"onStop");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.e(TAG,"onDestroy");
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction()==MotionEvent.ACTION_DOWN){
+            Intent intent = new Intent(this, TestB.class);
+            startActivity(intent);
+            return true;
+        }
+
+
+        return super.onTouchEvent(event);
+    }
 }
