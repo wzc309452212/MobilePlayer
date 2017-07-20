@@ -26,6 +26,26 @@ public class SystemVideoPlayer extends Activity {
 
         videoview = (VideoView) findViewById(R.id.videoview);
 
+        setListener();
+        getData();
+        setData();
+
+        // 设置控制面板
+        videoview.setMediaController(new android.widget.MediaController(this));
+    }
+
+    private void getData() {
+        // 得到播放地址
+        uri = getIntent().getData();
+    }
+
+    private void setData() {
+        if (uri!=null) {
+            videoview.setVideoURI(uri);
+        }
+    }
+
+    private void setListener() {
         // 准备好的监听
         videoview.setOnPreparedListener(new MyOnPreparedListener());
 
@@ -34,17 +54,6 @@ public class SystemVideoPlayer extends Activity {
 
         // 播放完成了的监听
         videoview.setOnCompletionListener(new MyOnCompletionListener());
-
-        // 得到播放地址
-        uri = getIntent().getData();
-        if (uri!=null) {
-            videoview.setVideoURI(uri);
-        }
-
-        // 设置控制面板
-        videoview.setMediaController(new android.widget.MediaController(this));
-
-
     }
 
     private class MyOnPreparedListener implements MediaPlayer.OnPreparedListener {
@@ -52,8 +61,6 @@ public class SystemVideoPlayer extends Activity {
         public void onPrepared(MediaPlayer mp) {
 
             videoview.start(); // 当底层解码准备好的时候 开始播放
-
-
         }
     }
 
@@ -69,6 +76,9 @@ public class SystemVideoPlayer extends Activity {
     private class MyOnCompletionListener implements MediaPlayer.OnCompletionListener {
         @Override
         public void onCompletion(MediaPlayer mp) {
+            // 1.单个视频-退出播放器
+            // 2.视频列表-播放下一个
+
             Toast.makeText(SystemVideoPlayer.this, "播放完成了"+uri, Toast.LENGTH_SHORT).show();
         }
     }

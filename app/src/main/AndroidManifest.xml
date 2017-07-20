@@ -22,7 +22,8 @@
             android:launchMode="singleTask"
             ></activity>
 
-        <activity android:name=".SystemVideoPlayer"/>
+        <activity android:name=".SystemVideoPlayer"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"></activity>
     </application>
 
 </manifest>
