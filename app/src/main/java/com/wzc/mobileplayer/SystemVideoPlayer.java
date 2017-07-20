@@ -65,12 +65,16 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
                 case PROGRESS:
                     // 1.得到当前的视频播放进度
                     int currentPosition = videoview.getCurrentPosition();
+
                     // 2.SeekBar.setProgress（当前进度）
                     seekVideo.setProgress(currentPosition);
+                    tvStystemTime.setText(getSystemTime());
                     //更新文本播放时间进度
                     tvCurrentTime.setText(utils.stringForTime(currentPosition));
+
                     // 设置系统时间，在handler中 更新文本播放进度之后
-                    // ????tvStystemTime.setText(getSystemTime());
+
+
                     //3.每秒更新一次
                     handler.removeMessages(PROGRESS);
                     handler.sendEmptyMessageDelayed(PROGRESS,1000);
@@ -83,10 +87,10 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
 
 
-    /*private String getSystemTime() {
+    private String getSystemTime() {
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
         return format.format(new Date());
-    }*/
+    }
 
 
     @Override
