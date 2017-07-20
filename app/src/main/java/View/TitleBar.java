@@ -40,6 +40,7 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
 
     /*
     当布局加载完成的时候回调这个方法
+    得到孩子的实例
      */
 
     @Override

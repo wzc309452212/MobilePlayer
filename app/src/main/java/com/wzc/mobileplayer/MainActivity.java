@@ -62,6 +62,8 @@ public class MainActivity extends FragmentActivity{
 
         setContentView(R.layout.activity_main);
         fl_main_content = (FrameLayout) findViewById(R.id.fl_main_content);
+
+
         rg_bottom_tag = (RadioGroup) findViewById(R.id.rg_bottom_tag);
 
         basePagers = new ArrayList<>();
@@ -73,7 +75,7 @@ public class MainActivity extends FragmentActivity{
         // 设置RadioGroup的监听
         rg_bottom_tag.setOnCheckedChangeListener(new MyOnCheckedChangeListener());
         /*
-        默认选中首页
+        默认选中本地视频
          */
         rg_bottom_tag.check(R.id.rb_video);
 
