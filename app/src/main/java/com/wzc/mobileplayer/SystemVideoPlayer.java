@@ -176,7 +176,16 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
     private class MyOnCompletionListener implements MediaPlayer.OnCompletionListener {
         @Override
         public void onCompletion(MediaPlayer mp) {
-            Toast.makeText(SystemVideoPlayer.this, "播放完成了"+uri, Toast.LENGTH_SHORT).show();
+           // Toast.makeText(SystemVideoPlayer.this, "播放完成了"+uri, Toast.LENGTH_SHORT).show();
+            //开始播放
+            videoview.start();
+
+             //准备好的时候
+             //1.视频的总播放时长和SeeKBar关联起来
+               int duration = videoview.getDuration();
+
+            // seekbarVideo.setMax(duration);
+            seekVideo.setMax(duration);
         }
     }
 
