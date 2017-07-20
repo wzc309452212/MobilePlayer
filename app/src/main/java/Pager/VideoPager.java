@@ -171,15 +171,17 @@ public class VideoPager extends BasePager {
            // Toast.makeText(context, "mediaItem == "+mediaItem.toString(), Toast.LENGTH_SHORT).show();
 
             // 1、调起系统所有的播放-隐式意图
-//            Intent intent = new Intent();
-//            intent.setDataAndType(Uri.parse(mediaItem.getData()),"video/*");
-//            context.startActivity(intent);
+            Intent intent = new Intent();
+            intent.setDataAndType(Uri.parse(mediaItem.getData()),"video/*");
+            context.startActivity(intent);
 
-            // 2.调用自己写的播放器-显式意图
+            /* 2.调用自己写的播放器-显式意图
              Intent intent = new Intent(context,SystemVideoPlayer.class);
              intent.setDataAndType(Uri.parse(mediaItem.getData()),"video/*");
              context.startActivity(intent);
-
+            */
         }
     }
+
+    
 }
