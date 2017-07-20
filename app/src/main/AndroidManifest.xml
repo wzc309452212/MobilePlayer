@@ -17,8 +17,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".SystemVideoPlayer"/>
+        <activity android:name=".MainActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"/>
+        <activity android:name=".SystemVideoPlayer"
+            android:configChanges="keyboardHidden|screenSize|orientation"/>
     </application>
 
 </manifest>

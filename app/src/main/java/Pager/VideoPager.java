@@ -1,11 +1,14 @@
 package Pager;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
@@ -22,6 +25,7 @@ import com.wzc.mobileplayer.R;
 import com.wzc.mobileplayer.SystemVideoPlayer;
 
 import java.util.ArrayList;
+import java.util.jar.Manifest;
 
 import Adapter.VideoPagerAdapter;
 import Base.BasePager;
@@ -115,9 +119,20 @@ public class VideoPager extends BasePager {
 
     private void getDataFromLocal() {
         new Thread(){
+//            @Override
+//            public UncaughtExceptionHandler getUncaughtExceptionHandler() {
+//                return super.getUncaughtExceptionHandler();
+//            }
+//
+//            @Override
+//            protected Object clone() throws CloneNotSupportedException {
+//                return super.clone();
+//            }
+
             @Override
             public void run() {
                 super.run();
+                isGrantExternalRW((Activity) context);
                 mediaItems = new ArrayList<>();
                 ContentResolver resolver = context.getContentResolver();
                 Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
@@ -157,13 +172,24 @@ public class VideoPager extends BasePager {
 
     }
 
+    private static boolean isGrantExternalRW(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                activity.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED)
+        {
+            activity.requestPermissions(new String[]{
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            },1);
+            return false;
+        } return true;
+    }
 
 
     private class MyOnItemClickListener implements android.widget.AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             MediaItem mediaItem = mediaItems.get(position);
-            Toast.makeText(context, "mediaItem == "+mediaItem.toString(), Toast.LENGTH_SHORT).show();
+            // Toast.makeText(context, "mediaItem == "+mediaItem.toString(), Toast.LENGTH_SHORT).show();
 
             // 1、调起系统所有的播放-隐式意图
 //            Intent intent = new Intent();
