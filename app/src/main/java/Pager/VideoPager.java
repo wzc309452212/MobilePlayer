@@ -71,6 +71,7 @@ public class VideoPager extends BasePager {
         super(context);
     }
 
+
     @Override
     public View initView() {
         LogUtils.e("本地视频页面被初始化了");
@@ -118,8 +119,12 @@ public class VideoPager extends BasePager {
             @Override
             public void run() {
                 super.run();
+
+                // 初始化集合
                 mediaItems = new ArrayList<>();
                 ContentResolver resolver = context.getContentResolver();
+
+                // sdcard的视频路径
                 Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
                 String[] objs = {
                         MediaStore.Video.Media.DISPLAY_NAME, // 视频文件在sdcard中的名称
@@ -163,7 +168,7 @@ public class VideoPager extends BasePager {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             MediaItem mediaItem = mediaItems.get(position);
-            Toast.makeText(context, "mediaItem == "+mediaItem.toString(), Toast.LENGTH_SHORT).show();
+           // Toast.makeText(context, "mediaItem == "+mediaItem.toString(), Toast.LENGTH_SHORT).show();
 
             // 1、调起系统所有的播放-隐式意图
 //            Intent intent = new Intent();

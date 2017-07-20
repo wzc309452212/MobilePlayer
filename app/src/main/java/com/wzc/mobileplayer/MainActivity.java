@@ -67,12 +67,12 @@ public class MainActivity extends FragmentActivity{
         setContentView(R.layout.activity_main);
         fl_main_content = (FrameLayout) findViewById(R.id.fl_main_content);
 
-        rg_bottom_tag = (RadioGroup) findViewById(R.id.rg_bottom_tag);
+
 
         initBasepager();
 
 
-
+        rg_bottom_tag = (RadioGroup) findViewById(R.id.rg_bottom_tag);
         // 设置RadioGroup的监听
         rg_bottom_tag.setOnCheckedChangeListener(new MyOnCheckedChangeListener());
         /*
