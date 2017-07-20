@@ -79,37 +79,40 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
                     handler.removeMessages(PROGRESS);
                     handler.sendEmptyMessageDelayed(PROGRESS,1000);
                     break;
-
-
             }
         }
     };
-
-
 
     private String getSystemTime() {
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
         return format.format(new Date());
     }
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         findViews();
+        // getData();
         setListener();
-        utils = new Utils();
+        initData();
+        setData();
 
 
-        // 得到播放地址
-        uri = getIntent().getData();
-        if (uri!=null) {
-            videoview.setVideoURI(uri);
-        }
         // 开始自定义 不需要喽
         // 设置控制面板
         // videoview.setMediaController(new android.widget.MediaController(this));
+    }
+
+    private void setData() {
+                
+        if (uri!=null) {
+            videoview.setVideoURI(uri);
+        }
+    }
+
+    private void initData() {
+        utils = new Utils();
     }
 
     private void setListener() {
@@ -139,13 +142,11 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
             // 当手指触碰的时候回调这个方法
-
         }
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
             // 当手指离开的时候回调这个方法
-
         }
     }
 
@@ -162,9 +163,6 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
             tvDuration.setText(utils.stringForTime(duration));
             // 2.发消息
             handler.sendEmptyMessage(PROGRESS);
-
-
-
         }
     }
 
@@ -263,6 +261,10 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         } else if ( v == btnVideoSwitchScreen ){
         // Handle clicks for btnVideoSwitchScreen
         }
+    }
+
+    private void getData(){
+        uri = getIntent().getData();
     }
 
     @Override
