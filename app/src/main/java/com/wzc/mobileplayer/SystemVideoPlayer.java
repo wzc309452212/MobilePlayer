@@ -127,8 +127,8 @@ public class SystemVideoPlayer extends Activity {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction()==MotionEvent.ACTION_DOWN){
-            Intent intent = new Intent(this, TestB.class);
-            startActivity(intent);
+           // Intent intent = new Intent(this, TestB.class);
+           // startActivity(intent);
             return true;
         }
 

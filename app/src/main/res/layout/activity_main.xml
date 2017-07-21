@@ -29,25 +29,25 @@
             android:id="@+id/rb_video"
             android:text="本地视频"
             android:drawableTop="@drawable/rb_video_drawable_selector"
-            style="@style/bottom_tag_style"
+            style="@style/bottom_button_style"
             />
         <RadioButton
             android:id="@+id/rb_audio"
             android:text="本地音乐"
             android:drawableTop="@drawable/rb_audio_drawable_selector"
-            style="@style/bottom_tag_style"
+            style="@style/bottom_button_style"
             />
         <RadioButton
             android:id="@+id/rb_net_video"
             android:text="网络视频"
             android:drawableTop="@drawable/rb_net_video_drawable_selector"
-            style="@style/bottom_tag_style"
+            style="@style/bottom_button_style"
             />
         <RadioButton
             android:id="@+id/rb_net_audio"
             android:text="网络音乐"
             android:drawableTop="@drawable/rb_net_audio_drawable_selector"
-            style="@style/bottom_tag_style"
+            style="@style/bottom_button_style"
             />
     </RadioGroup>
 

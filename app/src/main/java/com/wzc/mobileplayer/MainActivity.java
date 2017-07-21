@@ -62,15 +62,13 @@ public class MainActivity extends FragmentActivity{
 
         // Log.e("TAG","onCreate");
 
-          isGrantExternalRW(this);
+        // Android6.0以上版本 动态获取读取权限
+        isGrantExternalRW(this);
 
         setContentView(R.layout.activity_main);
         fl_main_content = (FrameLayout) findViewById(R.id.fl_main_content);
 
-
-
         initBasepager();
-
 
         rg_bottom_tag = (RadioGroup) findViewById(R.id.rg_bottom_tag);
         // 设置RadioGroup的监听
