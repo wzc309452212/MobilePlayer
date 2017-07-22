@@ -101,6 +101,18 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
         } else if (v== bt_start_pause){
 
+            if (videoview.isPlaying()){ // 判断是否正在播放着
+                // 当前的播放状态设置成暂停
+                videoview.pause();
+                // 按钮状态-更换成播放状态
+                bt_start_pause.setBackgroundResource(R.drawable.btn_start_selector);
+            } else {
+                // 当前暂停状态 刚切换成播放状态
+                videoview.start();
+                // 按钮状态-更换成暂停状态
+                bt_start_pause.setBackgroundResource(R.drawable.btn_pause_selector);
+            }
+
         } else if (v== bt_next){
 
         } else if (v== bt_switch_screen){
