@@ -64,7 +64,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
         // 设置控制面板
        // 第二次 我把你注释掉了 因为我已经写好了自己播放器的控制面板 嘿嘿 不用你了
-        // videoview.setMediaController(new android.widget.MediaController(this));
+       // videoview.setMediaController(new android.widget.MediaController(this));
     }
 
     private void getData() {
@@ -209,6 +209,14 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         bt_start_pause = (Button) findViewById(R.id.bt_start_pause);
         bt_next = (Button) findViewById(R.id.bt_next);
         bt_switch_screen = (Button) findViewById(R.id.bt_switch_screen);
+
+        btn_voice.setOnClickListener(this);
+        bt_start_pause.setOnClickListener(this);
+        bt_exit.setOnClickListener(this);
+        bt_next.setOnClickListener(this);
+        bt_pre.setOnClickListener(this);
+        bt_switch_player.setOnClickListener(this);
+        bt_switch_screen.setOnClickListener(this);
     }
 
 }
