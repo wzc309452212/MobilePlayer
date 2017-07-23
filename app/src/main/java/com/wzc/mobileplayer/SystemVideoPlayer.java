@@ -87,6 +87,9 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
         // 播放完成了的监听
         videoview.setOnCompletionListener(new MyOnCompletionListener());
+
+        // 2.设置SeekBar状态变化的监听
+        seek_video.setOnSeekBarChangeListener(new MyOnSeekBarChangeListener());
     }
 
     @Override
@@ -125,6 +128,11 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         public void onPrepared(MediaPlayer mp) {
 
             videoview.start(); // 当底层解码准备好的时候 开始播放
+
+            //1.视频的总时长和seekbar关联起来
+            int duration = videoview.getDuration();
+            seek_video.setMax(duration);
+
         }
     }
 
@@ -219,4 +227,40 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         bt_switch_screen.setOnClickListener(this);
     }
 
+
+    /**
+     * 自定义seekbar监听
+     */
+    private class MyOnSeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
+        /**
+         * 状态变化的时候回调
+         * @param seekBar
+         * @param progress 当前改变的进度-要拖动到的位置
+         * @param fromUser 用户导致的改变 true  否则 false
+         */
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            if (fromUser){
+                videoview.seekTo(progress);
+            }
+        }
+
+        /**
+         * 当手指按下时的回调
+         * @param seekBar
+         */
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        /**
+         * 当手指离开时的回调
+         * @param seekBar
+         */
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
+        }
+    }
 }
