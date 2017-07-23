@@ -1,7 +1,10 @@
 package com.wzc.mobileplayer;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.media.MediaPlayer;
@@ -65,6 +68,8 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
     DateFormat df;
 
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +92,14 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
     private void initData() {
         utils = new Utils();
+
+        // 注册监听电量变化的广播
+        MyBroadcastReceive receive = new MyBroadcastReceive();
+        IntentFilter filter = new IntentFilter();
+
+        // 监听电量变化
+        filter.addAction(Intent.ACTION_BATTERY_CHANGED);
+        registerReceiver(receive,filter);
     }
 
     private Handler handler = new Handler(){
@@ -320,6 +333,34 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
 
+        }
+    }
+
+    private class MyBroadcastReceive extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // 得到电量0~100
+            int level = intent.getIntExtra("level",0);
+
+            setBattery(level);
+        }
+    }
+
+    private void setBattery(int level) {
+        if (level<=0){
+            iv_battery.setImageResource(R.drawable.ic_battery_0);
+        } else if (level<=10){
+            iv_battery.setImageResource(R.drawable.ic_battery_10);
+        } else if (level<=20){
+            iv_battery.setImageResource(R.drawable.ic_battery_20);
+        } else if (level<=40){
+            iv_battery.setImageResource(R.drawable.ic_battery_40);
+        } else if (level<=60){
+            iv_battery.setImageResource(R.drawable.ic_battery_60);
+        } else if (level<=80){
+            iv_battery.setImageResource(R.drawable.ic_battery_80);
+        } else if (level<=100){
+            iv_battery.setImageResource(R.drawable.ic_battery_100);
         }
     }
 }
