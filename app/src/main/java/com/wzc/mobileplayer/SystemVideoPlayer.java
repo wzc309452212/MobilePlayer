@@ -2,10 +2,14 @@ package com.wzc.mobileplayer;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
 import android.media.MediaPlayer;
 import android.media.session.MediaController;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -18,6 +22,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import java.util.Date;
+
+import Utils.Utils;
+
+
 /**
  * Created by Administrator on 2017/5/24.
  */
@@ -26,6 +35,9 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
     // 重写方法 去注册（新版本AS去哪注册啊）
 
     private static final String TAG = SystemVideoPlayer.class.getSimpleName(); // "SystemVideoPlayerActivity"
+
+    // 进度更新
+    private static final int PROGRESS = 0;
 
     private VideoView videoview;
     private Uri uri;
@@ -49,6 +61,10 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
     private Button bt_next;
     private Button bt_switch_screen;
 
+    Utils utils;
+
+    DateFormat df;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,10 +78,47 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         getData();
         setData();
 
+        initData();
+
         // 设置控制面板
        // 第二次 我把你注释掉了 因为我已经写好了自己播放器的控制面板 嘿嘿 不用你了
        // videoview.setMediaController(new android.widget.MediaController(this));
     }
+
+    private void initData() {
+        utils = new Utils();
+    }
+
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case PROGRESS:
+
+                    // 获取最新的视频播放进度
+                    int currentPosition = videoview.getCurrentPosition();
+                    // 设置seekbar_video视频更新
+                    seek_video.setProgress(currentPosition);
+
+                    // 设置播放进度的时间
+                    tv_currenttime.setText(utils.stringForTime(currentPosition));
+
+                    // 设置系统时间
+                    df = new SimpleDateFormat("HH:mm:ss");
+
+                    tv_systemtime.setText(df.format(new Date()));
+
+                    // 移除消息 每隔一秒重新发送
+                    removeMessages(PROGRESS);
+                    sendEmptyMessageDelayed(PROGRESS, 1000);
+
+                    break;
+
+            }
+
+        }
+    };
 
     private void getData() {
         // 得到播放地址
@@ -130,8 +183,14 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
             videoview.start(); // 当底层解码准备好的时候 开始播放
 
             //1.视频的总时长和seekbar关联起来
-            int duration = videoview.getDuration();
+            int duration = mp.getDuration();
             seek_video.setMax(duration);
+
+            // 设置总时长
+            tv_duration.setText(utils.stringForTime(duration));
+
+            // 发消息
+            handler.sendEmptyMessage(PROGRESS);
 
         }
     }
