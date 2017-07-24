@@ -25,8 +25,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import java.util.ArrayList;
 import java.util.Date;
 
+import Domain.MediaItem;
 import Utils.Utils;
 
 
@@ -65,9 +67,15 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
     private Button bt_switch_screen;
 
     Utils utils;
+    private MyBroadcastReceiver receiver;
 
     DateFormat df;
 
+    /*
+    播放列表数据
+     */
+    private ArrayList<MediaItem> mediaItems;
+    int position;
 
 
     @Override
@@ -94,12 +102,12 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         utils = new Utils();
 
         // 注册监听电量变化的广播
-        MyBroadcastReceive receive = new MyBroadcastReceive();
+        receiver = new MyBroadcastReceiver();
         IntentFilter filter = new IntentFilter();
 
         // 监听电量变化
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
-        registerReceiver(receive,filter);
+        registerReceiver(receiver,filter);
     }
 
     private Handler handler = new Handler(){
@@ -117,10 +125,8 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
                     // 设置播放进度的时间
                     tv_currenttime.setText(utils.stringForTime(currentPosition));
 
-                    // 设置系统时间
-                    df = new SimpleDateFormat("HH:mm:ss");
-
-                    tv_systemtime.setText(df.format(new Date()));
+                    // 设置系统的时间
+                    tv_systemtime.setText(getSystemTime());
 
                     // 移除消息 每隔一秒重新发送
                     removeMessages(PROGRESS);
@@ -133,14 +139,35 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         }
     };
 
+    /*
+    得到系统的时间
+     */
+    private String getSystemTime() {
+        // 设置系统时间
+        df = new SimpleDateFormat("HH:mm:ss");
+        return df.format(new Date());
+    }
+
     private void getData() {
-        // 得到播放地址
+        // 一个地址 从一个文件发起的单个播放请求
         uri = getIntent().getData();
+
+        // 得到播放列表
+        mediaItems = (ArrayList<MediaItem>) getIntent().getSerializableExtra("videolist");
+        position = getIntent().getIntExtra("position",0);
+
     }
 
     private void setData() {
-        if (uri!=null) {
+        if (mediaItems!=null && mediaItems.size()>0){
+            // 根据位置获取播放视频的对象
+            MediaItem mediaItem = mediaItems.get(position);
+            videoview.setVideoPath(mediaItem.getData());
+            tv_name.setText(mediaItem.getName());
+        }else if (uri!=null) {
+            // 设置播放地址
             videoview.setVideoURI(uri);
+            tv_name.setText(uri.toString());
         }
     }
 
@@ -253,8 +280,18 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+
         Log.e(TAG,"onDestroy");
+
+        // 是否是资源-释放孩子的
+        if (receiver!=null){
+            unregisterReceiver(receiver);
+            receiver = null;
+        }
+
+        handler.removeCallbacksAndMessages(null);
+        super.onDestroy();
+
     }
 
     @Override
@@ -336,7 +373,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         }
     }
 
-    private class MyBroadcastReceive extends BroadcastReceiver{
+    private class MyBroadcastReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {
             // 得到电量0~100

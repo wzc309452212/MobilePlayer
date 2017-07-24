@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
@@ -162,8 +163,6 @@ public class VideoPager extends BasePager {
 
     }
 
-
-
     private class MyOnItemClickListener implements android.widget.AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -177,10 +176,21 @@ public class VideoPager extends BasePager {
             context.startActivity(intent);
             */
             // 2.调用自己写的播放器-显式意图
-             Intent intent = new Intent(context,SystemVideoPlayer.class);
-             intent.setDataAndType(Uri.parse(mediaItem.getData()),"video/*");
-             context.startActivity(intent);
+//             Intent intent = new Intent(context,SystemVideoPlayer.class);
+//             intent.setDataAndType(Uri.parse(mediaItem.getData()),"video/*");
+//             context.startActivity(intent);
 
+            // 3.传递列表参数
+            Intent intent = new Intent(context,SystemVideoPlayer.class);
+
+            Bundle bundle = new Bundle();
+            // 列表数据
+            bundle.putSerializable("videolist",mediaItems);
+            intent.putExtras(bundle);
+            // 传递点击的位置
+            intent.putExtra("position",position);
+
+            startActivity(intent);
         }
     }
 
