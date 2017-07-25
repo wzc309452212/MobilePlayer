@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -43,6 +44,8 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
     // 进度更新
     private static final int PROGRESS = 0;
+    // 隐藏控制面板
+    private static final int HIDE_MEDIA_CONTROLLER = 1;
 
     private VideoView videoview;
     private Uri uri;
@@ -68,6 +71,9 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
     Utils utils;
     private MyBroadcastReceiver receiver;
+    private GestureDetector detector;
+    // 是否显示控制面板
+    private boolean isShowMediaController = false;
 
     DateFormat df;
 
@@ -83,14 +89,11 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
 
         Log.e(TAG,"onCreate");
-
         setContentView(R.layout.activity_system_video_player);
-
         findViews();
         setListener();
         getData();
         setData();
-
         initData();
 
         // 设置控制面板
@@ -108,34 +111,38 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         // 监听电量变化
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         registerReceiver(receiver,filter);
+
+        // 初始化手势识别器
+        detector = new GestureDetector(this,new MyGestureDetector());
+
+        // 默认控制面板是隐藏的
+        hideMediaController();
     }
+
 
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
+                case HIDE_MEDIA_CONTROLLER:
+                    hideMediaController(); // 隐藏控制面板
+                    break;
                 case PROGRESS:
 
                     // 获取最新的视频播放进度
                     int currentPosition = videoview.getCurrentPosition();
                     // 设置seekbar_video视频更新
                     seek_video.setProgress(currentPosition);
-
                     // 设置播放进度的时间
                     tv_currenttime.setText(utils.stringForTime(currentPosition));
-
                     // 设置系统的时间
                     tv_systemtime.setText(getSystemTime());
-
                     // 移除消息 每隔一秒重新发送
                     removeMessages(PROGRESS);
                     sendEmptyMessageDelayed(PROGRESS, 1000);
-
                     break;
-
             }
-
         }
     };
 
@@ -237,17 +244,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
         } else if (v== bt_start_pause){
 
-            if (videoview.isPlaying()){ // 判断是否正在播放着
-                // 当前的播放状态设置成暂停
-                videoview.pause();
-                // 按钮状态-更换成播放状态
-                bt_start_pause.setBackgroundResource(R.drawable.btn_start_selector);
-            } else {
-                // 当前暂停状态 刚切换成播放状态
-                videoview.start();
-                // 按钮状态-更换成暂停状态
-                bt_start_pause.setBackgroundResource(R.drawable.btn_pause_selector);
-            }
+            startAndPause();
 
         } else if (v== bt_next){
             setNextVideo();
@@ -255,6 +252,26 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
         } else if (v== bt_switch_screen){
 
+        }
+
+        // 移除消息
+        handler.removeMessages(HIDE_MEDIA_CONTROLLER);
+        // 重新发消息
+        handler.sendEmptyMessageDelayed(HIDE_MEDIA_CONTROLLER,4000);
+
+    }
+
+    private void startAndPause() {
+        if (videoview.isPlaying()){ // 判断是否正在播放着
+            // 当前的播放状态设置成暂停
+            videoview.pause();
+            // 按钮状态-更换成播放状态
+            bt_start_pause.setBackgroundResource(R.drawable.btn_start_selector);
+        } else {
+            // 当前暂停状态 刚切换成播放状态
+            videoview.start();
+            // 按钮状态-更换成暂停状态
+            bt_start_pause.setBackgroundResource(R.drawable.btn_pause_selector);
         }
     }
 
@@ -291,7 +308,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
                 // 设置播放地址
                 videoview.setVideoPath(mediaItem.getData());
 
-                // 播放列表中的视频位置变化就检测按钮状态
+                // 播放列表中的视频位置变化就校验按钮状态
                 checkButtonStatus();
             } else {
                 // 越界
@@ -383,6 +400,9 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+        detector.onTouchEvent(event); // 把事件传递给手势识别器
+
         if (event.getAction()==MotionEvent.ACTION_DOWN){
            // Intent intent = new Intent(this, TestB.class);
            // startActivity(intent);
@@ -436,7 +456,9 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
          */
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
             if (fromUser){
+                // 响应用户拖动
                 videoview.seekTo(progress);
             }
         }
@@ -448,6 +470,8 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
 
+            // 移除消息
+            handler.removeMessages(HIDE_MEDIA_CONTROLLER);
         }
 
         /**
@@ -456,6 +480,8 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
          */
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
+            // 重新发送消息
+            handler.sendEmptyMessageDelayed(HIDE_MEDIA_CONTROLLER,4000);
 
         }
     }
@@ -486,5 +512,55 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         } else if (level<=100){
             iv_battery.setImageResource(R.drawable.ic_battery_100);
         }
+    }
+
+    private class MyGestureDetector extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public void onLongPress(MotionEvent e) {
+            super.onLongPress(e);
+
+            // Toast.makeText(SystemVideoPlayer.this, "我被长按了", Toast.LENGTH_SHORT).show();
+            startAndPause();
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+
+
+            Toast.makeText(SystemVideoPlayer.this, "我被双击了", Toast.LENGTH_SHORT).show();
+            return super.onDoubleTap(e);
+        }
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+
+            //Toast.makeText(SystemVideoPlayer.this, "我被单击了", Toast.LENGTH_SHORT).show();
+            if (isShowMediaController){
+                // 隐藏
+                hideMediaController();
+                // 把消息移除
+                handler.removeMessages(HIDE_MEDIA_CONTROLLER);
+            } else {
+                // 显示
+                ShowMediaController();
+                // 重新发消息 4秒后自动隐藏
+                handler.sendEmptyMessageDelayed(HIDE_MEDIA_CONTROLLER,4000);
+            }
+            return super.onSingleTapConfirmed(e);
+        }
+    }
+
+    // 显示控制面板
+    private void ShowMediaController() {
+        isShowMediaController = true;
+        ll_top.setVisibility(View.VISIBLE);
+        ll_bottom.setVisibility(View.VISIBLE);
+    }
+
+    // 隐藏控制面板
+    private void hideMediaController() {
+        isShowMediaController = false;
+        ll_top.setVisibility(View.GONE);
+        ll_bottom.setVisibility(View.GONE);
     }
 }

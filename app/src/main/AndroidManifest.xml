@@ -23,6 +23,7 @@
             ></activity>
 
         <activity android:name=".SystemVideoPlayer"
+            android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"></activity>
         <activity android:name=".TestB"
             android:theme="@android:style/Theme.Dialog"></activity>
