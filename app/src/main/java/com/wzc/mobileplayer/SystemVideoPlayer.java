@@ -169,6 +169,45 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
             videoview.setVideoURI(uri);
             tv_name.setText(uri.toString());
         }
+
+        // 检测按钮状态
+        checkButtonStatus();
+    }
+
+    private void checkButtonStatus() {
+        // 1.判断一下视频列表
+        if (mediaItems!=null && mediaItems.size()>0){
+            //1.其他情况（视频总数大于3，非头非尾）设置默认
+            setButtonEnable(true);
+
+            //2.播放第0个，上一个按钮设置成灰色
+            if (position==0){
+                bt_pre.setBackgroundResource(R.drawable.btn_pre_gray);
+                bt_pre.setEnabled(false);
+            }
+            //3.播放最后一个，下一个按钮设置成灰色
+            if (position==mediaItems.size()-1){
+                bt_next.setBackgroundResource(R.drawable.btn_next_gray);
+                bt_next.setEnabled(false);
+            }
+        }
+        // 2.单个uri的情况
+        else if (uri !=null){
+            // 上一个和下一个都设置成灰色
+            setButtonEnable(false);
+        }
+    }
+
+    private void setButtonEnable(boolean b) {
+        if (b){
+            bt_pre.setBackgroundResource(R.drawable.btn_pre_selector);
+            bt_next.setBackgroundResource(R.drawable.btn_next_selector);
+        } else {
+            bt_pre.setBackgroundResource(R.drawable.btn_pre_gray);
+            bt_next.setBackgroundResource(R.drawable.btn_next_gray);
+        }
+        bt_pre.setEnabled(b);
+        bt_next.setEnabled(b);
     }
 
     private void setListener() {
@@ -194,6 +233,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         } else if (v== bt_exit){
 
         } else if (v== bt_pre){
+            setPreVideo();
 
         } else if (v== bt_start_pause){
 
@@ -210,10 +250,55 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
             }
 
         } else if (v== bt_next){
+            setNextVideo();
+
 
         } else if (v== bt_switch_screen){
 
         }
+    }
+
+    private void setNextVideo() {
+        // 1、判断一下列表
+        if (mediaItems !=null && mediaItems.size()>0){
+            position++;
+            if (position< mediaItems.size()){
+                MediaItem mediaItem = mediaItems.get(position);
+                // 得到视频标题
+                tv_name.setText(mediaItem.getName());
+                // 设置视频的播放地址
+                videoview.setVideoPath(mediaItem.getData());
+
+                // 视频列表中播放视频的位置发生变化就要检测一下按钮状态
+                checkButtonStatus();
+            } else {
+                // 越界
+                position = mediaItems.size()-1;
+                // 关闭播放器
+                finish();
+            }
+        }
+    }
+
+    private void setPreVideo() {
+        // 1、判断一下列表
+        if (mediaItems !=null && mediaItems.size()>0){
+            position--;
+            if (position>=0){
+                MediaItem mediaItem = mediaItems.get(position);
+                // 设置标题
+                tv_name.setText(mediaItem.getName());
+                // 设置播放地址
+                videoview.setVideoPath(mediaItem.getData());
+
+                // 播放列表中的视频位置变化就检测按钮状态
+                checkButtonStatus();
+            } else {
+                // 越界
+                position = 0;
+            }
+        }
+
     }
 
     private class MyOnPreparedListener implements MediaPlayer.OnPreparedListener {
@@ -250,7 +335,9 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
             // 1.单个视频-退出播放器
             // 2.视频列表-播放下一个
 
-            Toast.makeText(SystemVideoPlayer.this, "播放完成了"+uri, Toast.LENGTH_SHORT).show();
+            // Toast.makeText(SystemVideoPlayer.this, "播放完成了"+uri, Toast.LENGTH_SHORT).show();
+
+            setNextVideo();
         }
     }
 
