@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -24,13 +25,13 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 import Domain.MediaItem;
 import Utils.Utils;
+import View.VideoView;
 
 
 /**
@@ -42,6 +43,10 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
     private static final String TAG = SystemVideoPlayer.class.getSimpleName(); // "SystemVideoPlayerActivity"
 
+    // 设置默认屏幕大小
+    private static final int VIDEO_TYPE_DEFAULT = 0;
+    // 设置全屏大小
+    private static final int VIDEO_TYPE_FULL = 1;
     // 进度更新
     private static final int PROGRESS = 0;
     // 隐藏控制面板
@@ -74,6 +79,12 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
     private GestureDetector detector;
     // 是否显示控制面板
     private boolean isShowMediaController = false;
+    // 视频是否全屏显示
+    private boolean isFullScreen = false;
+    private int screenWidth = 0;
+    private int screenHeight = 0;
+    private int videoWidth = 0;
+    private int videoHeight = 0;
 
     DateFormat df;
 
@@ -82,7 +93,6 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
      */
     private ArrayList<MediaItem> mediaItems;
     int position;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -114,6 +124,14 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
         // 初始化手势识别器
         detector = new GestureDetector(this,new MyGestureDetector());
+
+        // 得到屏幕的宽和高
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        // 得到屏幕参数类
+        getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
+        // 屏幕的宽和高
+        screenWidth = outMetrics.widthPixels;
+        screenHeight = outMetrics.heightPixels;
 
         // 默认控制面板是隐藏的
         hideMediaController();
@@ -239,18 +257,23 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
         } else if (v== bt_exit){
 
+            finish();
         } else if (v== bt_pre){
             setPreVideo();
-
         } else if (v== bt_start_pause){
 
             startAndPause();
-
         } else if (v== bt_next){
             setNextVideo();
 
-
         } else if (v== bt_switch_screen){
+            if (isFullScreen){
+                // 由全屏变为默认
+                setVideoType(VIDEO_TYPE_DEFAULT);
+            } else {
+                // 全屏显示
+                setVideoType(VIDEO_TYPE_FULL);
+            }
 
         }
 
@@ -322,6 +345,14 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         @Override
         public void onPrepared(MediaPlayer mp) {
 
+            // 在视频播放之前得到视频的原始大小
+            videoWidth = mp.getVideoWidth();
+            videoHeight = mp.getVideoHeight();
+
+            // 设置默认大小
+            setVideoType(VIDEO_TYPE_DEFAULT);
+
+            // 开始播放
             videoview.start(); // 当底层解码准备好的时候 开始播放
 
             //1.视频的总时长和seekbar关联起来
@@ -525,9 +556,14 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
         @Override
         public boolean onDoubleTap(MotionEvent e) {
-
-
-            Toast.makeText(SystemVideoPlayer.this, "我被双击了", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(SystemVideoPlayer.this, "我被双击了", Toast.LENGTH_SHORT).show();
+            if (isFullScreen){
+                // 设置默认 不是全屏
+                setVideoType(VIDEO_TYPE_DEFAULT);
+            } else {
+                // 全屏
+                setVideoType(VIDEO_TYPE_FULL);
+            }
             return super.onDoubleTap(e);
         }
 
@@ -547,6 +583,38 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
                 handler.sendEmptyMessageDelayed(HIDE_MEDIA_CONTROLLER,4000);
             }
             return super.onSingleTapConfirmed(e);
+        }
+    }
+
+    private void setVideoType(int videoTypeDefault) {
+        switch (videoTypeDefault){
+            case VIDEO_TYPE_FULL:
+                // 视频屏幕状态显示三部走 1.是否全屏 2.设置屏幕参数 3.改变按钮状态
+                isFullScreen = true;
+                videoview.setViewSize(screenWidth,screenHeight);
+                bt_switch_screen.setBackgroundResource(R.drawable.btn_screen_default_selector);
+                break;
+            case VIDEO_TYPE_DEFAULT:
+                isFullScreen = false;
+                // 视频原始的画面大小
+                int mVideoWidth = videoWidth;
+                int mVideoHeight = videoHeight;
+
+                /*
+                * 计算后的值
+                 */
+                int width = screenWidth;
+                int height = screenHeight;
+
+                if (mVideoWidth*height<width*mVideoHeight){
+                    width = height*mVideoWidth/mVideoHeight;
+                } else if (mVideoWidth*height >width*mVideoHeight){
+                    height = width*mVideoHeight/mVideoWidth;
+                }
+                // 将计算后的参数传递给视频
+                videoview.setViewSize(width,height);
+                bt_switch_screen.setBackgroundResource(R.drawable.btn_screen_full_selector);
+                break;
         }
     }
 
