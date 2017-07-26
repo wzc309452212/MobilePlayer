@@ -22,6 +22,7 @@ public class SplashActivity extends Activity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                // 两秒后执行
              startMainActivity();
                 Log.e(TAG,"当前线程名称=="+Thread.currentThread().getName());
             }
@@ -50,6 +51,7 @@ public class SplashActivity extends Activity {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         Log.e(TAG,"onTouchEvent==Action"+event.getAction());
+        // 按下和离开
         startMainActivity();
         return super.onTouchEvent(event);
     }
