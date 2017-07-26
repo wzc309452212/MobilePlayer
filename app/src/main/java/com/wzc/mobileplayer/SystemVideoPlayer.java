@@ -2,6 +2,10 @@ package com.wzc.mobileplayer;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.icu.text.SimpleDateFormat;
 import android.media.MediaPlayer;
 import android.media.session.MediaController;
@@ -43,7 +47,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
     private LinearLayout llTop;
     private TextView tvName;
-    private ImageView tvBattery;
+    private ImageView ivBattery;
     private TextView tvStystemTime;
     private Button btnVoice;
     private SeekBar seekVoice;
@@ -56,6 +60,9 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
     private Button btnVideoPre;
     private Button btnVideoStartPause;
     private Button btnVideoSwitchScreen;
+
+    // 注册电量监听广播
+    private MyBroadcastReceiver receiver;
 
     private Handler handler = new Handler(){
         @Override
@@ -98,14 +105,13 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         initData();
         setData();
 
-
         // 开始自定义 不需要喽
         // 设置控制面板
         // videoview.setMediaController(new android.widget.MediaController(this));
     }
 
     private void setData() {
-                
+
         if (uri!=null) {
             videoview.setVideoURI(uri);
         }
@@ -113,6 +119,14 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
     private void initData() {
         utils = new Utils();
+
+        // 注册监听电量广播
+        receiver = new MyBroadcastReceiver();
+        IntentFilter filter = new IntentFilter();
+        // 监听电量变化
+        filter.addAction(Intent.ACTION_BATTERY_CHANGED);
+        registerReceiver(receiver,filter);
+
     }
 
     private void setListener() {
@@ -202,7 +216,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         videoview = (VideoView) findViewById(R.id.videoview);
         llTop = (LinearLayout)findViewById( R.id.ll_top );
         tvName = (TextView)findViewById( R.id.tv_name );
-        tvBattery = (ImageView)findViewById( R.id.tv_battery );
+        ivBattery = (ImageView)findViewById( R.id.tv_battery );
         tvStystemTime = (TextView)findViewById( R.id.tv_stystem_time );
         btnVoice = (Button)findViewById( R.id.btn_voice );
         seekVoice = (SeekBar)findViewById( R.id.seek_voice );
@@ -272,4 +286,39 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         super.onDestroy();
         finish();
     }
+
+    private class MyBroadcastReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // 得到电量：0~100
+            int level = intent.getIntExtra("level",0);
+            // 主线程
+            setBattery(level);
+        }
+    }
+
+    /*
+    *设置电量
+    * @param level
+     */
+    private void setBattery(int level) {
+        if (level <= 0) {
+            ivBattery.setImageResource(R.drawable.ic_battery_0);
+        } else if (level <= 10) {
+            ivBattery.setImageResource(R.drawable.ic_battery_10);
+        } else if (level <= 20) {
+            ivBattery.setImageResource(R.drawable.ic_battery_20);
+        } else if (level <= 40) {
+            ivBattery.setImageResource(R.drawable.ic_battery_40);
+        } else if (level <= 60) {
+            ivBattery.setImageResource(R.drawable.ic_battery_60);
+        } else if (level <= 80) {
+            ivBattery.setImageResource(R.drawable.ic_battery_80);
+        } else if (level <= 100) {
+            ivBattery.setImageResource(R.drawable.ic_battery_100);
+        } else {
+            ivBattery.setImageResource(R.drawable.ic_battery_100);
+        }
+    }
+
 }
