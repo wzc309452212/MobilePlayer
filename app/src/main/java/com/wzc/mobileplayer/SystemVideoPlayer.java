@@ -18,6 +18,7 @@ import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -311,8 +312,6 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
             // 第三个参数：1.显示系统调声音的；0，不显示
             am.setStreamVolume(AudioManager.STREAM_MUSIC,progress,0);
             seekbar_voice.setProgress(progress);
-
-            currentVolume = progress;
         }
     }
 
@@ -498,7 +497,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
             int volume = (int) Math.min(Math.max((mVol + delta),0),maxVolume);
             // 判断
             if (delta!=0){
-                updateVoice(volume);
+                updateVoiceProgress(volume);
             } else if (event.getAction() == MotionEvent.ACTION_UP){
                 handler.sendEmptyMessageDelayed(HIDE_MEDIA_CONTROLLER,4000);
             }
@@ -710,7 +709,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             if (fromUser){
-                updateVoice(progress);
+                updateVoiceProgress(progress);
             }
         }
 
@@ -731,4 +730,31 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
+            // 改变音量的值
+            currentVolume--;
+            updateVoiceProgress(currentVolume);
+            // 移除消息
+            handler.removeMessages(HIDE_MEDIA_CONTROLLER);
+            // 重新发消息
+            handler.sendEmptyMessageDelayed(HIDE_MEDIA_CONTROLLER,4000);
+            return true;
+        } else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP){
+            currentVolume++;
+            updateVoiceProgress(currentVolume);
+            handler.removeMessages(HIDE_MEDIA_CONTROLLER);
+            handler.sendEmptyMessageDelayed(HIDE_MEDIA_CONTROLLER,4000);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void updateVoiceProgress(int progress) {
+        // 1.声音的类型 2.声音的值0~15 3. 1是显示系统调节声音的控件 0 不显示
+        am.setStreamVolume(AudioManager.STREAM_MUSIC,progress,0);
+        seekbar_voice.setProgress(progress);
+        currentVolume = progress;
+    }
 }
