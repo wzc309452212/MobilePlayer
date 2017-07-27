@@ -311,8 +311,9 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
             // 第三个参数：1.显示系统调声音的；0，不显示
             am.setStreamVolume(AudioManager.STREAM_MUSIC,progress,0);
             seekbar_voice.setProgress(progress);
+
+            currentVolume = progress;
         }
-        currentVolume = progress;
     }
 
     private void startAndPause() {
@@ -460,19 +461,51 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
     }
 
+    private float startY;
+    /*
+    *  滑动的区域
+     */
+    private int touchRang = 0;
+    /*
+    *  当按下时的音量
+     */
+    private int mVol;
+
+
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
+        super.onTouchEvent(event);
         detector.onTouchEvent(event); // 把事件传递给手势识别器
 
         if (event.getAction()==MotionEvent.ACTION_DOWN){
            // Intent intent = new Intent(this, TestB.class);
            // startActivity(intent);
+            // 按下的时候记录起始坐标，最大的滑动区域（屏幕的高），当前的音量
+            startY = event.getY();
+            touchRang = Math.min (screenHeight,screenWidth);
+            mVol = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+            handler.removeMessages(HIDE_MEDIA_CONTROLLER);
             return true;
+        } else if (event.getAction()==MotionEvent.ACTION_MOVE){
+            float endY = event.getY();
+            // 屏幕滑动的距离
+            float distanceY = startY - endY;
+            // 滑动屏幕的距离：总距离 = 改变的声音：总声音
+            // 改变的声音 = （滑动屏幕的距离/总距离）*总声音
+            float delta = (distanceY/touchRang) * maxVolume;
+            // 设置的声音 = 原来记录的声音 + 改变的声音
+            int volume = (int) Math.min(Math.max((mVol + delta),0),maxVolume);
+            // 判断
+            if (delta!=0){
+                updateVoice(volume);
+            } else if (event.getAction() == MotionEvent.ACTION_UP){
+                handler.sendEmptyMessageDelayed(HIDE_MEDIA_CONTROLLER,4000);
+            }
         }
 
 
-        return super.onTouchEvent(event);
+        return true;
     }
 
     private void findViews() {
@@ -697,4 +730,5 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
             handler.sendEmptyMessageDelayed(HIDE_MEDIA_CONTROLLER,4000);
         }
     }
+
 }
