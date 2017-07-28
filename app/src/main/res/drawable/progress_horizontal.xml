@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
 <!-- Copyright (C) 2008 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,3 +31,12 @@
     
 </layer-list>
 
+=======
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background" android:drawable="@drawable/progress_background"/>
+    <item android:id="@android:id/secondaryProgress" android:drawable="@drawable/progress_secondaryprogress"/>
+    <item android:id="@android:id/progress" android:drawable="@drawable/progress_normal"/>
+
+
+</layer-list>
+>>>>>>> 19c26b2a96cfaccdb3d5802d9181b916b1299e4d
