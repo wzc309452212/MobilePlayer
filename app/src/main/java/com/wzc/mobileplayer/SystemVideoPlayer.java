@@ -114,6 +114,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         Log.e(TAG,"onCreate");
         setContentView(R.layout.activity_system_video_player);
         findViews();
+<<<<<<< HEAD
         setListener();
         getData();
         setData();
@@ -236,6 +237,133 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         }
     }
 
+=======
+        initData();
+        setListener();
+        getData();
+        setData();
+
+
+        // 设置控制面板
+       // 第二次 我把你注释掉了 因为我已经写好了自己播放器的控制面板 嘿嘿 不用你了
+       // videoview.setMediaController(new android.widget.MediaController(this));
+    }
+
+    private void initData() {
+        utils = new Utils();
+
+        // 注册监听电量变化的广播
+        receiver = new MyBroadcastReceiver();
+        IntentFilter filter = new IntentFilter();
+
+        // 监听电量变化
+        filter.addAction(Intent.ACTION_BATTERY_CHANGED);
+        registerReceiver(receiver,filter);
+
+        // 初始化手势识别器
+        detector = new GestureDetector(this,new MyGestureDetector());
+
+        // 得到屏幕的宽和高
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        // 得到屏幕参数类
+        getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
+        // 屏幕的宽和高
+        screenWidth = outMetrics.widthPixels;
+        screenHeight = outMetrics.heightPixels;
+
+        // 默认控制面板是隐藏的
+        hideMediaController();
+    }
+
+
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case HIDE_MEDIA_CONTROLLER:
+                    hideMediaController(); // 隐藏控制面板
+                    break;
+                case PROGRESS:
+
+                    // 获取最新的视频播放进度
+                    int currentPosition = videoview.getCurrentPosition();
+                    // 设置seekbar_video视频更新
+                    seek_video.setProgress(currentPosition);
+                    // 设置播放进度的时间
+                    tv_currenttime.setText(utils.stringForTime(currentPosition));
+                    // 设置系统的时间
+                    tv_systemtime.setText(getSystemTime());
+                    // 移除消息 每隔一秒重新发送
+                    removeMessages(PROGRESS);
+                    sendEmptyMessageDelayed(PROGRESS, 1000);
+                    break;
+            }
+        }
+    };
+
+    /*
+    得到系统的时间
+     */
+    private String getSystemTime() {
+        // 设置系统时间
+        df = new SimpleDateFormat("HH:mm:ss");
+        return df.format(new Date());
+    }
+
+    private void getData() {
+        // 一个地址 从一个文件发起的单个播放请求
+        uri = getIntent().getData();
+
+        Log.e("TAG","uri==="+uri);
+
+        // 得到播放列表
+        mediaItems = (ArrayList<MediaItem>) getIntent().getSerializableExtra("videolist");
+        position = getIntent().getIntExtra("position",0);
+
+    }
+
+    private void setData() {
+        if (mediaItems!=null && mediaItems.size()>0){
+            // 根据位置获取播放视频的对象
+            MediaItem mediaItem = mediaItems.get(position);
+            videoview.setVideoPath(mediaItem.getData());
+            tv_name.setText(mediaItem.getName());
+        }else if (uri!=null) {
+            // 设置播放地址
+            videoview.setVideoURI(uri);
+            tv_name.setText(uri.toString());
+        }
+
+        // 检测按钮状态
+        checkButtonStatus();
+    }
+
+    private void checkButtonStatus() {
+        // 1.判断一下视频列表
+        if (mediaItems!=null && mediaItems.size()>0){
+            //1.其他情况（视频总数大于3，非头非尾）设置默认
+            setButtonEnable(true);
+
+            //2.播放第0个，上一个按钮设置成灰色
+            if (position==0){
+                bt_pre.setBackgroundResource(R.drawable.btn_pre_gray);
+                bt_pre.setEnabled(false);
+            }
+            //3.播放最后一个，下一个按钮设置成灰色
+            if (position==mediaItems.size()-1){
+                bt_next.setBackgroundResource(R.drawable.btn_next_gray);
+                bt_next.setEnabled(false);
+            }
+        }
+        // 2.单个uri的情况
+        else if (uri !=null){
+            // 上一个和下一个都设置成灰色
+            setButtonEnable(false);
+        }
+    }
+
+>>>>>>> 7bea0044cfec7549a7f995f1982f5676ed43511e
     private void setButtonEnable(boolean b) {
         if (b){
             bt_pre.setBackgroundResource(R.drawable.btn_pre_selector);
@@ -314,6 +442,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
             seekbar_voice.setProgress(progress);
         }
     }
+<<<<<<< HEAD
 
     private void startAndPause() {
         if (videoview.isPlaying()){ // 判断是否正在播放着
@@ -329,6 +458,23 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         }
     }
 
+=======
+
+    private void startAndPause() {
+        if (videoview.isPlaying()){ // 判断是否正在播放着
+            // 当前的播放状态设置成暂停
+            videoview.pause();
+            // 按钮状态-更换成播放状态
+            bt_start_pause.setBackgroundResource(R.drawable.btn_start_selector);
+        } else {
+            // 当前暂停状态 刚切换成播放状态
+            videoview.start();
+            // 按钮状态-更换成暂停状态
+            bt_start_pause.setBackgroundResource(R.drawable.btn_pause_selector);
+        }
+    }
+
+>>>>>>> 7bea0044cfec7549a7f995f1982f5676ed43511e
     private void setNextVideo() {
         // 1、判断一下列表
         if (mediaItems !=null && mediaItems.size()>0){
