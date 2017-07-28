@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent();
         // 第一参数：播放路径
         // 第二参数：路径对应的类型
-        intent.setDataAndType(Uri.parse("http://localhost/sunyang.mp4"),"video/*");
+        intent.setDataAndType(Uri.parse("http://localhost:8888/old%20drivers.mp4"),"video/*");
         startActivity(intent);
     }
 
