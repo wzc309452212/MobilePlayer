@@ -114,10 +114,11 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         Log.e(TAG,"onCreate");
         setContentView(R.layout.activity_system_video_player);
         findViews();
+        initData();
         setListener();
         getData();
         setData();
-        initData();
+
 
         // 设置控制面板
        // 第二次 我把你注释掉了 因为我已经写好了自己播放器的控制面板 嘿嘿 不用你了
@@ -189,6 +190,8 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
     private void getData() {
         // 一个地址 从一个文件发起的单个播放请求
         uri = getIntent().getData();
+
+        Log.e("TAG","uri==="+uri);
 
         // 得到播放列表
         mediaItems = (ArrayList<MediaItem>) getIntent().getSerializableExtra("videolist");
