@@ -1,9 +1,11 @@
 package Domain;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/5/23.
  */
-public class MediaItem {
+public class MediaItem implements Serializable {
     private String name;
     private long duration;
     private long size;

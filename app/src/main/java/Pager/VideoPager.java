@@ -1,14 +1,12 @@
 package Pager;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
@@ -25,7 +23,6 @@ import com.wzc.mobileplayer.R;
 import com.wzc.mobileplayer.SystemVideoPlayer;
 
 import java.util.ArrayList;
-import java.util.jar.Manifest;
 
 import Adapter.VideoPagerAdapter;
 import Base.BasePager;
@@ -75,6 +72,7 @@ public class VideoPager extends BasePager {
         super(context);
     }
 
+
     @Override
     public View initView() {
         LogUtils.e("本地视频页面被初始化了");
@@ -119,22 +117,15 @@ public class VideoPager extends BasePager {
 
     private void getDataFromLocal() {
         new Thread(){
-//            @Override
-//            public UncaughtExceptionHandler getUncaughtExceptionHandler() {
-//                return super.getUncaughtExceptionHandler();
-//            }
-//
-//            @Override
-//            protected Object clone() throws CloneNotSupportedException {
-//                return super.clone();
-//            }
-
             @Override
             public void run() {
                 super.run();
-                isGrantExternalRW((Activity) context);
+
+                // 初始化集合
                 mediaItems = new ArrayList<>();
                 ContentResolver resolver = context.getContentResolver();
+
+                // sdcard的视频路径
                 Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
                 String[] objs = {
                         MediaStore.Video.Media.DISPLAY_NAME, // 视频文件在sdcard中的名称
@@ -172,35 +163,36 @@ public class VideoPager extends BasePager {
 
     }
 
-    private static boolean isGrantExternalRW(Activity activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                activity.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED)
-        {
-            activity.requestPermissions(new String[]{
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-            },1);
-            return false;
-        } return true;
-    }
-
-
     private class MyOnItemClickListener implements android.widget.AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             MediaItem mediaItem = mediaItems.get(position);
-            // Toast.makeText(context, "mediaItem == "+mediaItem.toString(), Toast.LENGTH_SHORT).show();
+           // Toast.makeText(context, "mediaItem == "+mediaItem.toString(), Toast.LENGTH_SHORT).show();
 
+            /*
             // 1、调起系统所有的播放-隐式意图
-//            Intent intent = new Intent();
-//            intent.setDataAndType(Uri.parse(mediaItem.getData()),"video/*");
-//            context.startActivity(intent);
-
+            Intent intent = new Intent();
+            intent.setDataAndType(Uri.parse(mediaItem.getData()),"video/*");
+            context.startActivity(intent);
+            */
             // 2.调用自己写的播放器-显式意图
-             Intent intent = new Intent(context,SystemVideoPlayer.class);
-             intent.setDataAndType(Uri.parse(mediaItem.getData()),"video/*");
-             context.startActivity(intent);
+//             Intent intent = new Intent(context,SystemVideoPlayer.class);
+//             intent.setDataAndType(Uri.parse(mediaItem.getData()),"video/*");
+//             context.startActivity(intent);
 
+            // 3.传递列表参数
+            Intent intent = new Intent(context,SystemVideoPlayer.class);
+
+            Bundle bundle = new Bundle();
+            // 列表数据
+            bundle.putSerializable("videolist",mediaItems);
+            intent.putExtras(bundle);
+            // 传递点击的位置
+            intent.putExtra("position",position);
+
+            startActivity(intent);
         }
     }
+
+
 }

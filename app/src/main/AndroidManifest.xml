@@ -18,17 +18,18 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity"
-<<<<<<< HEAD
-            android:configChanges="keyboardHidden|screenSize|orientation"/>
-        <activity android:name=".SystemVideoPlayer"
-            android:configChanges="keyboardHidden|screenSize|orientation"/>
-
-=======
             android:configChanges="screenSize|orientation|keyboardHidden"
+            android:launchMode="singleTask"
             ></activity>
 
-        <activity android:name=".SystemVideoPlayer"/>
->>>>>>> origin/master
+        <activity android:name=".SystemVideoPlayer"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"></activity>
+        <activity android:name=".TestB"
+            android:theme="@android:style/Theme.Dialog"></activity>
+
+
     </application>
+
 
 </manifest>
