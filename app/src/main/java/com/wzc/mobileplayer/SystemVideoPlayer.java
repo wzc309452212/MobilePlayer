@@ -115,6 +115,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         setContentView(R.layout.activity_system_video_player);
         findViews();
 <<<<<<< HEAD
+<<<<<<< HEAD
         setListener();
         getData();
         setData();
@@ -271,6 +272,41 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         screenWidth = outMetrics.widthPixels;
         screenHeight = outMetrics.heightPixels;
 
+=======
+        initData();
+        setListener();
+        getData();
+        setData();
+
+
+        // 设置控制面板
+       // 第二次 我把你注释掉了 因为我已经写好了自己播放器的控制面板 嘿嘿 不用你了
+       // videoview.setMediaController(new android.widget.MediaController(this));
+    }
+
+    private void initData() {
+        utils = new Utils();
+
+        // 注册监听电量变化的广播
+        receiver = new MyBroadcastReceiver();
+        IntentFilter filter = new IntentFilter();
+
+        // 监听电量变化
+        filter.addAction(Intent.ACTION_BATTERY_CHANGED);
+        registerReceiver(receiver,filter);
+
+        // 初始化手势识别器
+        detector = new GestureDetector(this,new MyGestureDetector());
+
+        // 得到屏幕的宽和高
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        // 得到屏幕参数类
+        getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
+        // 屏幕的宽和高
+        screenWidth = outMetrics.widthPixels;
+        screenHeight = outMetrics.heightPixels;
+
+>>>>>>> 7bea0044cfec7549a7f995f1982f5676ed43511e
         // 默认控制面板是隐藏的
         hideMediaController();
     }
@@ -363,6 +399,9 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         }
     }
 
+<<<<<<< HEAD
+>>>>>>> 7bea0044cfec7549a7f995f1982f5676ed43511e
+=======
 >>>>>>> 7bea0044cfec7549a7f995f1982f5676ed43511e
     private void setButtonEnable(boolean b) {
         if (b){
@@ -427,6 +466,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         handler.removeMessages(HIDE_MEDIA_CONTROLLER);
         // 重新发消息
         handler.sendEmptyMessageDelayed(HIDE_MEDIA_CONTROLLER,4000);
+<<<<<<< HEAD
 
     }
 
@@ -460,6 +500,24 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
 =======
 
+=======
+
+    }
+
+    private void updateVoice(int progress) {
+        if (isMute){
+            am.setStreamVolume(AudioManager.STREAM_MUSIC,0,0);
+            seekbar_voice.setProgress(0);
+        } else {
+            // 第一个参数：声音的类型
+            // 第二个参数：声音的值0~15
+            // 第三个参数：1.显示系统调声音的；0，不显示
+            am.setStreamVolume(AudioManager.STREAM_MUSIC,progress,0);
+            seekbar_voice.setProgress(progress);
+        }
+    }
+
+>>>>>>> 7bea0044cfec7549a7f995f1982f5676ed43511e
     private void startAndPause() {
         if (videoview.isPlaying()){ // 判断是否正在播放着
             // 当前的播放状态设置成暂停
@@ -474,6 +532,9 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         }
     }
 
+<<<<<<< HEAD
+>>>>>>> 7bea0044cfec7549a7f995f1982f5676ed43511e
+=======
 >>>>>>> 7bea0044cfec7549a7f995f1982f5676ed43511e
     private void setNextVideo() {
         // 1、判断一下列表
@@ -647,6 +708,8 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
             } else if (event.getAction() == MotionEvent.ACTION_UP){
                 handler.sendEmptyMessageDelayed(HIDE_MEDIA_CONTROLLER,4000);
             }
+<<<<<<< HEAD
+=======
         }
 
 
@@ -733,9 +796,99 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
             // 重新发送消息
             handler.sendEmptyMessageDelayed(HIDE_MEDIA_CONTROLLER,4000);
 
+>>>>>>> 7bea0044cfec7549a7f995f1982f5676ed43511e
+        }
+
+
+        return true;
+    }
+
+<<<<<<< HEAD
+    private void findViews() {
+
+        videoview = (VideoView) findViewById(R.id.videoview);
+
+        ll_top = (LinearLayout) findViewById(R.id.ll_top);
+        tv_name = (TextView) findViewById(R.id.tv_name);
+        iv_battery = (ImageView) findViewById(R.id.iv_battery);
+        tv_systemtime = (TextView) findViewById(R.id.tv_systemtime);
+        btn_voice = (Button) findViewById(R.id.btn_voice);
+        seekbar_voice = (SeekBar) findViewById(R.id.seekbar_voice);
+        bt_switch_player = (Button) findViewById(R.id.bt_switch_player);
+        ll_bottom = (LinearLayout) findViewById(R.id.ll_bottom);
+        tv_currenttime = (TextView) findViewById(R.id.tv_currenttime);
+        seek_video = (SeekBar) findViewById(R.id.seek_video);
+        tv_duration = (TextView) findViewById(R.id.tv_duration);
+        bt_exit = (Button) findViewById(R.id.bt_exit);
+        bt_pre = (Button) findViewById(R.id.bt_pre);
+        bt_start_pause = (Button) findViewById(R.id.bt_start_pause);
+        bt_next = (Button) findViewById(R.id.bt_next);
+        bt_switch_screen = (Button) findViewById(R.id.bt_switch_screen);
+
+        btn_voice.setOnClickListener(this);
+        bt_start_pause.setOnClickListener(this);
+        bt_exit.setOnClickListener(this);
+        bt_next.setOnClickListener(this);
+        bt_pre.setOnClickListener(this);
+        bt_switch_player.setOnClickListener(this);
+        bt_switch_screen.setOnClickListener(this);
+
+        // 获取音频的最大值15，
+        am = (AudioManager) getSystemService(AUDIO_SERVICE);
+        currentVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+        maxVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+
+        // 和SeekBar关联
+        seekbar_voice.setMax(maxVolume);
+        Log.e("TAG",maxVolume+"------------");
+        seekbar_voice.setProgress(currentVolume);
+    }
+
+
+    /**
+     * 自定义seekbar监听
+     */
+    private class VideoOnSeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
+        /**
+         * 状态变化的时候回调
+         * @param seekBar
+         * @param progress 当前改变的进度-要拖动到的位置
+         * @param fromUser 用户导致的改变 true  否则 false
+         */
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            if (fromUser){
+                // 响应用户拖动
+                videoview.seekTo(progress);
+            }
+        }
+
+        /**
+         * 当手指按下时的回调
+         * @param seekBar
+         */
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+            // 移除消息
+            handler.removeMessages(HIDE_MEDIA_CONTROLLER);
+        }
+
+        /**
+         * 当手指离开时的回调
+         * @param seekBar
+         */
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            // 重新发送消息
+            handler.sendEmptyMessageDelayed(HIDE_MEDIA_CONTROLLER,4000);
+
         }
     }
 
+=======
+>>>>>>> 7bea0044cfec7549a7f995f1982f5676ed43511e
     private class MyBroadcastReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {

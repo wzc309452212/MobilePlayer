@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7bea0044cfec7549a7f995f1982f5676ed43511e
 =======
 >>>>>>> 7bea0044cfec7549a7f995f1982f5676ed43511e
 <!-- Copyright (C) 2008 The Android Open Source Project
@@ -35,6 +38,7 @@
 </layer-list>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@android:id/background" android:drawable="@drawable/progress_background"/>
@@ -44,5 +48,7 @@
 
 </layer-list>
 >>>>>>> 19c26b2a96cfaccdb3d5802d9181b916b1299e4d
+=======
+>>>>>>> 7bea0044cfec7549a7f995f1982f5676ed43511e
 =======
 >>>>>>> 7bea0044cfec7549a7f995f1982f5676ed43511e
