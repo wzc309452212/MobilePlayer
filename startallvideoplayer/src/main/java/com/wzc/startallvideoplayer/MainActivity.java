@@ -18,7 +18,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent();
         // 第一参数：播放路径
         // 第二参数：路径对应的类型
-        intent.setDataAndType(Uri.parse("http://10.0.2.2:8888/stone.mp4"),"video/*");
+//        intent.setDataAndType(Uri.parse("http://10.0.2.2:8888/stone.mp4"),"video/*");
+        intent.setDataAndType(Uri.parse("http://video.mtime.com/66820/?mid=208175"),"video/*");
         startActivity(intent);
     }
 

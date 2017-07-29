@@ -78,6 +78,8 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
     private Button bt_switch_screen;
     private TextView tv_loading;
     private LinearLayout ll_loading;
+    private LinearLayout ll_buffer;
+    private TextView tv_buffer;
 
     Utils utils;
     private MyBroadcastReceiver receiver;
@@ -202,6 +204,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 //    }
 
 
+    private int prePosition;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -230,6 +233,19 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
                         seek_video.setSecondaryProgress(secondaryProgress);
                     }
 
+                    if (isNetUrl && videoview.isPlaying()){
+                        int buffer = currentPosition - prePosition; // 1000左右
+                        // 一秒之内播放的进度小于500毫秒就是卡了，否则不卡
+                        if (buffer < 500) {
+                            // 卡显示缓冲
+                            ll_buffer.setVisibility(View.VISIBLE);
+                        } else {
+                            // 不卡就隐藏
+                            ll_buffer.setVisibility(View.GONE);
+                        }
+                    }
+                    prePosition = currentPosition;
+                    // 不断发消息
                     removeMessages(PROGRESS);
                     sendEmptyMessageDelayed(PROGRESS, 1000);
                     break;
@@ -557,6 +573,8 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         bt_switch_screen = (Button) findViewById(R.id.bt_switch_screen);
         ll_loading = (LinearLayout) findViewById(R.id.ll_loading);
         tv_loading = (TextView) findViewById(R.id.tv_loading);
+        ll_buffer = (LinearLayout) findViewById(R.id.ll_buffer);
+        tv_buffer = (TextView) findViewById(R.id.tv_buffer);
 
         btn_voice.setOnClickListener(this);
         bt_start_pause.setOnClickListener(this);
