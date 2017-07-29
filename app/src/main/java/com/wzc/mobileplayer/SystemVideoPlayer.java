@@ -54,6 +54,8 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
     private static final int PROGRESS = 0;
     // 隐藏控制面板
     private static final int HIDE_MEDIA_CONTROLLER = 1;
+    // 显示网络速度
+    private static final int SHOW_NET_SPEED = 3;
 
     private VideoView videoview;
     private Uri uri;
@@ -120,6 +122,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
         Log.e(TAG,"onCreate");
         setContentView(R.layout.activity_system_video_player);
+
         findViews();
         initData();
         setListener();
@@ -210,6 +213,15 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
+                case SHOW_NET_SPEED:
+                    String netSpeed = utils.showNetSpeed(SystemVideoPlayer.this);
+                    // 不为空
+                    tv_loading.setText("正在加载..."+netSpeed);
+                    tv_buffer.setText("缓存中..."+netSpeed);
+
+                    removeMessages(SHOW_NET_SPEED);
+                    sendEmptyMessageDelayed(SHOW_NET_SPEED,1000);
+                    break;
                 case HIDE_MEDIA_CONTROLLER:
                     hideMediaController(); // 隐藏控制面板
                     break;
@@ -589,10 +601,12 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         currentVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
         maxVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 
-        // 和SeekBar关联
+        // 和seekBar关联
         seekbar_voice.setMax(maxVolume);
         Log.e("TAG",maxVolume+"------------");
         seekbar_voice.setProgress(currentVolume);
+        // 发消息 显示网速
+        handler.sendEmptyMessage(SHOW_NET_SPEED);
     }
 
     /**
