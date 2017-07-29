@@ -24,6 +24,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,6 +76,8 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
     private Button bt_start_pause;
     private Button bt_next;
     private Button bt_switch_screen;
+    private TextView tv_loading;
+    private LinearLayout ll_loading;
 
     Utils utils;
     private MyBroadcastReceiver receiver;
@@ -161,7 +164,6 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
             videoview.setVideoURI(uri);
             tv_name.setText(uri.toString());
         }
-
         // 检测按钮状态
         checkButtonStatus();
     }
@@ -340,6 +342,8 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         if (mediaItems !=null && mediaItems.size()>0){
             position++;
             if (position< mediaItems.size()){
+                // 显示加载页面
+                ll_loading.setVisibility(View.VISIBLE);
                 MediaItem mediaItem = mediaItems.get(position);
                 // 得到视频标题
                 tv_name.setText(mediaItem.getName());
@@ -362,6 +366,8 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         if (mediaItems !=null && mediaItems.size()>0){
             position--;
             if (position>=0){
+                // 显示加载页面
+                ll_loading.setVisibility(View.VISIBLE);
                 MediaItem mediaItem = mediaItems.get(position);
                 // 设置标题
                 tv_name.setText(mediaItem.getName());
@@ -401,6 +407,10 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
             // 发消息
             handler.sendEmptyMessage(PROGRESS);
+
+            // 隐藏加载等待页面
+            ll_loading.setVisibility(View.GONE);
+
 
         }
     }
@@ -529,6 +539,8 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         bt_start_pause = (Button) findViewById(R.id.bt_start_pause);
         bt_next = (Button) findViewById(R.id.bt_next);
         bt_switch_screen = (Button) findViewById(R.id.bt_switch_screen);
+        ll_loading = (LinearLayout) findViewById(R.id.ll_loading);
+        tv_loading = (TextView) findViewById(R.id.tv_loading);
 
         btn_voice.setOnClickListener(this);
         bt_start_pause.setOnClickListener(this);
