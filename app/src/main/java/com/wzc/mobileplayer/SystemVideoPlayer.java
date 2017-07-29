@@ -101,6 +101,8 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
     private int maxVolume;
     // 是否静音
     private boolean isMute = false;
+    // 是否是网络视频
+    private boolean isNetUrl;
 
     DateFormat df;
 
@@ -117,10 +119,10 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         Log.e(TAG,"onCreate");
         setContentView(R.layout.activity_system_video_player);
         findViews();
+        initData();
         setListener();
         getData();
         setData();
-        initData();
 
         // 设置控制面板
        // 第二次 我把你注释掉了 因为我已经写好了自己播放器的控制面板 嘿嘿 不用你了
@@ -157,12 +159,15 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         if (mediaItems!=null && mediaItems.size()>0){
             // 根据位置获取播放视频的对象
             MediaItem mediaItem = mediaItems.get(position);
+            isNetUrl = utils.isNetUrl(mediaItem.getData());
             videoview.setVideoPath(mediaItem.getData());
             tv_name.setText(mediaItem.getName());
+
         }else if (uri!=null) {
             // 设置播放地址
             videoview.setVideoURI(uri);
             tv_name.setText(uri.toString());
+            isNetUrl = utils.isNetUrl(uri.toString());
         }
         // 检测按钮状态
         checkButtonStatus();
@@ -216,6 +221,15 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
                     // 设置系统的时间
                     tv_systemtime.setText(getSystemTime());
                     // 移除消息 每隔一秒重新发送
+
+                    // 设置视频缓存进度更新
+                    if (isNetUrl){
+                        int buffer = videoview.getBufferPercentage(); // 0~100
+                        // 缓存进度
+                        int secondaryProgress = buffer*seek_video.getMax()/100;
+                        seek_video.setSecondaryProgress(secondaryProgress);
+                    }
+
                     removeMessages(PROGRESS);
                     sendEmptyMessageDelayed(PROGRESS, 1000);
                     break;
@@ -347,6 +361,8 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
                 MediaItem mediaItem = mediaItems.get(position);
                 // 得到视频标题
                 tv_name.setText(mediaItem.getName());
+                // 判断是否是网络视频
+                isNetUrl = utils.isNetUrl(mediaItem.getData());
                 // 设置视频的播放地址
                 videoview.setVideoPath(mediaItem.getData());
 
@@ -371,6 +387,8 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
                 MediaItem mediaItem = mediaItems.get(position);
                 // 设置标题
                 tv_name.setText(mediaItem.getName());
+                // 判断是否是网络视频
+                isNetUrl = utils.isNetUrl(mediaItem.getData());
                 // 设置播放地址
                 videoview.setVideoPath(mediaItem.getData());
 
@@ -410,8 +428,6 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
             // 隐藏加载等待页面
             ll_loading.setVisibility(View.GONE);
-
-
         }
     }
 
@@ -560,7 +576,6 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         Log.e("TAG",maxVolume+"------------");
         seekbar_voice.setProgress(currentVolume);
     }
-
 
     /**
      * 自定义seekbar监听
