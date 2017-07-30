@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.wzc.mobileplayer">
+
+    <uses-sdk
+        tools:overrideLibrary="io.vov.vitamio"
+        />
+
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -242,17 +249,8 @@
 
                             <category android:name="android.intent.category.DEFAULT" />
                         </intent-filter>
-
-
-
-
-
         </activity>
         <activity android:name=".TestB"
             android:theme="@android:style/Theme.Dialog"></activity>
-
-
     </application>
-
-
 </manifest>

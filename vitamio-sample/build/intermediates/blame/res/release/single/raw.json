@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/build/intermediates/res/merged/release/raw/test_cbr.mp3",
+        "source": "/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/res/raw/test_cbr.mp3"
+    },
+    {
+        "merged": "/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/build/intermediates/res/merged/release/raw/libarm.so",
+        "source": "/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/res/raw/libarm.so"
+    }
+]
