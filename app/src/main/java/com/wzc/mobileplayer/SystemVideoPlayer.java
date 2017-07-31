@@ -1,8 +1,10 @@
 package com.wzc.mobileplayer;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.icu.text.DateFormat;
@@ -322,6 +324,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
             updateVoice(currentVolume);
 
         } else if (v== bt_switch_player){
+            showSwitchPlayerDialog();
 
         } else if (v== bt_exit){
 
@@ -350,6 +353,28 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         // 重新发消息
         handler.sendEmptyMessageDelayed(HIDE_MEDIA_CONTROLLER,4000);
 
+    }
+
+    /**
+     * 显示切换播放器对话框
+     */
+    private void showSwitchPlayerDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("温馨提示");
+        builder.setMessage("当前播放使用系统播放器播放,当播放出现有声音没有画面的时候,请切换万能播放器");
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startVitamioVideoPlayer();
+            }
+        });
+        builder.show();
     }
 
     private void updateVoice(int progress) {

@@ -39,7 +39,7 @@
         <activity android:name=".SystemVideoPlayer"
             android:screenOrientation="landscape"
             android:label="@string/player_name"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
+            android:theme="@style/noAnimation_Theme">
 
             <intent-filter>
                                 <action android:name="android.intent.action.VIEW" />
@@ -258,7 +258,7 @@
         </activity>
         <activity android:name=".VitamioVideoPlayer"
             android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"></activity>
+            android:theme="@style/noAnimation_Theme"></activity>
         <activity android:name="io.vov.vitamio.activity.InitActivity"
             android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
             android:launchMode="singleTop"

@@ -1,7 +1,0 @@
-#Sun Jul 30 22:19:52 HKT 2017
-base.0=/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_60bb5ae2358632a7071fa81f43309146ebd11c59
-renamed.1=classes2.dex
-renamed.0=classes.dex
-file.1=/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_81fff4383d62d86ef0b2ea3bb12d4cd7656744f2/classes.dex
-base.1=/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_81fff4383d62d86ef0b2ea3bb12d4cd7656744f2
-file.0=/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_60bb5ae2358632a7071fa81f43309146ebd11c59/classes.dex

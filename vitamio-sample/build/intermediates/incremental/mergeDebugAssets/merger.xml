@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="default"><source path="/Users/admin/Documents/GitHub/MobilePlayer/vitamio/build/intermediates/bundles/default/assets"/></dataSet><dataSet config="main"><source path="/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/src/main/assets"/><source path="/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/build/generated/assets/shaders/debug"/></dataSet><dataSet config="debug"><source path="/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/src/debug/assets"/></dataSet></merger>
