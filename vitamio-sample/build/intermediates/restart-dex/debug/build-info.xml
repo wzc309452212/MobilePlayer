@@ -2,13 +2,13 @@
 <instant-run
     abi="x86"
     api-level="24"
-    build-mode="COLD"
+    build-mode="FULL"
     density="420dpi"
     format="10"
     plugin-version="2.3.3"
-    timestamp="1501424445203"
+    timestamp="1501505473315"
     token="-1594972862172778518"
-    verifier="COLD_SWAP_REQUESTED" >
+    verifier="FULL_BUILD_REQUESTED" >
 
     <task
         name="javac"
@@ -23,9 +23,43 @@
         name="verifier"
         duration="0" />
 
+    <artifact
+        location="/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/build/intermediates/split-apk/debug/slices/slice_1.apk"
+        type="SPLIT" />
+    <artifact
+        location="/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/build/intermediates/split-apk/debug/slices/slice_2.apk"
+        type="SPLIT" />
+    <artifact
+        location="/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/build/intermediates/split-apk/debug/slices/slice_0.apk"
+        type="SPLIT" />
+    <artifact
+        location="/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/build/intermediates/split-apk/debug/slices/slice_4.apk"
+        type="SPLIT" />
+    <artifact
+        location="/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/build/intermediates/split-apk/debug/slices/slice_9.apk"
+        type="SPLIT" />
+    <artifact
+        location="/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/build/intermediates/split-apk/debug/slices/slice_3.apk"
+        type="SPLIT" />
+    <artifact
+        location="/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/build/intermediates/split-apk/debug/slices/slice_5.apk"
+        type="SPLIT" />
+    <artifact
+        location="/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/build/intermediates/split-apk/debug/slices/slice_8.apk"
+        type="SPLIT" />
+    <artifact
+        location="/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/build/intermediates/split-apk/debug/slices/slice_6.apk"
+        type="SPLIT" />
+    <artifact
+        location="/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/build/intermediates/split-apk/debug/slices/slice_7.apk"
+        type="SPLIT" />
+    <artifact
+        location="/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/build/outputs/apk/vitamio-sample-debug.apk"
+        type="SPLIT_MAIN" />
+
     <build
         build-mode="FULL"
-        timestamp="1501424430157"
+        timestamp="1501505473315"
         verifier="FULL_BUILD_REQUESTED" >
         <artifact
             location="/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/build/intermediates/split-apk/debug/slices/slice_1.apk"
@@ -61,9 +95,5 @@
             location="/Users/admin/Documents/GitHub/MobilePlayer/vitamio-sample/build/outputs/apk/vitamio-sample-debug.apk"
             type="SPLIT_MAIN" />
     </build>
-    <build
-        build-mode="COLD"
-        timestamp="1501424445203"
-        verifier="COLD_SWAP_REQUESTED" />
 
 </instant-run>

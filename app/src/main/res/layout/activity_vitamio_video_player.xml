@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_vitamio_video_player"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:gravity="center"
+    tools:context=".SystemVideoPlayer">
+
+    <com.wzc.mobileplayer.view.ViatamioView
+        android:id="@+id/videoview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        />
+
+    <include layout="@layout/mediacontroller"/>
+    <include layout="@layout/loading" android:id="@+id/ll_loading"/>
+    <include layout="@layout/buffer" android:id="@+id/ll_buffer"/>
+
+</RelativeLayout>

@@ -465,6 +465,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         public boolean onError(MediaPlayer mp, int what, int extra) {
             Toast.makeText(SystemVideoPlayer.this, "播放出错", Toast.LENGTH_SHORT).show();
             // 1.播放的视频格式不支持--跳转万能播放器播放
+            startVitamioVideoPlayer();
 
             // 2.播放网络资源视频的时候，断网了==提示-重试（3次）
 
@@ -472,6 +473,32 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
             return true;
         }
+    }
+
+    /**
+     * 启动万能播放器
+     */
+    private void startVitamioVideoPlayer() {
+
+        if(videoview!=null){
+            videoview.stopPlayback();
+        }
+
+        Intent intent = new Intent(this,VitamioVideoPlayer.class);
+
+        if (mediaItems!=null && mediaItems.size()>0){
+
+            Bundle bundle = new Bundle();
+            // 列表数据
+            bundle.putSerializable("videolist",mediaItems);
+            intent.putExtras(bundle);
+            // 传递点击的位置
+            intent.putExtra("position",position);
+        } else if (uri != null){
+            intent.setDataAndType(uri,"video/*");
+        }
+        startActivity(intent);
+        finish();
     }
 
     private class MyOnCompletionListener implements MediaPlayer.OnCompletionListener {
