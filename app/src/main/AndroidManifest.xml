@@ -3,10 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.wzc.mobileplayer">
 
-    <uses-sdk
-        tools:overrideLibrary="io.vov.vitamio"
-        />
-
+    <uses-sdk tools:overrideLibrary="io.vov.vitamio" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -22,21 +19,22 @@
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
+        android:name=".MyApplication"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashActivity">
+        <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"
+        <activity android:name=".activity.MainActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:launchMode="singleTask"
             ></activity>
 
-        <activity android:name=".SystemVideoPlayer"
+        <activity android:name=".activity.SystemVideoPlayer"
             android:screenOrientation="landscape"
             android:label="@string/player_name"
             android:theme="@style/noAnimation_Theme">
@@ -256,7 +254,7 @@
                             <category android:name="android.intent.category.DEFAULT" />
                         </intent-filter>
         </activity>
-        <activity android:name=".VitamioVideoPlayer"
+        <activity android:name=".activity.VitamioVideoPlayer"
             android:screenOrientation="landscape"
             android:theme="@style/noAnimation_Theme"></activity>
         <activity android:name="io.vov.vitamio.activity.InitActivity"

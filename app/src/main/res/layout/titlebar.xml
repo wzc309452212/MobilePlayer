@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<View.TitleBar xmlns:android="http://schemas.android.com/apk/res/android"
+<com.wzc.mobileplayer.View.TitleBar xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="50dp"
@@ -56,4 +56,4 @@
         android:src="@drawable/btn_history"
         />
 
-</View.TitleBar>
+</com.wzc.mobileplayer.View.TitleBar>

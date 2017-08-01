@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#000000"
     android:gravity="center"
-    tools:context=".SystemVideoPlayer">
+    tools:context=".activity.SystemVideoPlayer">
 
     <com.wzc.mobileplayer.view.ViatamioView
         android:id="@+id/videoview"
