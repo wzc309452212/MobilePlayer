@@ -7,6 +7,7 @@
     tools:context=".activity.SystemAudioPlayer">
 
     <RelativeLayout
+        android:id="@+id/rl_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
@@ -32,6 +33,7 @@
             android:textSize="16sp"/>
     </RelativeLayout>
     <LinearLayout
+        android:id="@+id/ll_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -94,5 +96,14 @@
                 android:background="@drawable/btn_switch_lyric_selector"/>
         </LinearLayout>
     </LinearLayout>
+
+    <com.wzc.mobileplayer.View.LyricShowView
+        android:id="@+id/lyric_show_view"
+        android:layout_height="match_parent"
+        android:layout_above="@id/ll_bottom"
+        android:layout_below="@id/rl_top"
+        android:layout_width="match_parent"
+        />
+
 
 </RelativeLayout>

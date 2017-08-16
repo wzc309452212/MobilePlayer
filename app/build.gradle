@@ -26,4 +26,5 @@ dependencies {
     compile project(':vitamio')
     compile project(':xutils')
     compile project(':MaterialRefreshLayout')
+    compile project(':EventBus')
 }
