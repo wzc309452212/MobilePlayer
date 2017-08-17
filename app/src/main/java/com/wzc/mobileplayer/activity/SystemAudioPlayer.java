@@ -221,8 +221,13 @@ public class SystemAudioPlayer extends Activity implements View.OnClickListener{
         }
     }
 
+
+    /**
+     * 切换模式
+     */
     private void changePlaymode() {
         try{
+            // 得到模式
             int playmode = service.getPlayMode();
 
             if (playmode == MusicPlayerService.REPEAT_NORMAL){

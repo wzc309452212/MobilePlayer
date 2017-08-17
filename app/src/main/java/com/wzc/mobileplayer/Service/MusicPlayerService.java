@@ -267,12 +267,18 @@ public class MusicPlayerService extends Service {
         nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Intent intent = new Intent(this, SystemAudioPlayer.class);
         intent.putExtra("notification",true); // 标识来自状态栏
+        // 包含意图
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_CANCEL_CURRENT);
         Notification notification = null;
         if (android.os.Build.VERSION.SDK_INT>=Build.VERSION_CODES.JELLY_BEAN){
             notification = new Notification.Builder(this)
+                    // 图片
                     .setSmallIcon(R.drawable.notification_music_playing)
+                    // 标题
                     .setContentTitle("沧艺悦听")
+                    // 内容
+                    .setContentText("正在播放："+getAudioName())
+                    // 点击动作 延期意图
                     .setContentIntent(pendingIntent)
                     .build();
             // 点击后还存在属性
