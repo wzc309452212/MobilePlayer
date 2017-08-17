@@ -50,8 +50,6 @@ interface IMusicPlayerService {
     // 根据传入的位置 播放
     void seekTo(int position);
 
-    String getAudioPath();
-
 
 
 }
