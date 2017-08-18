@@ -52,6 +52,6 @@ interface IMusicPlayerService {
 
     String getAudioPath();
 
-
+    int getAudioSessionId();
 
 }

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.drawable.AnimationDrawable;
+import android.media.audiofx.Visualizer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -27,6 +28,7 @@ import com.wzc.mobileplayer.R;
 import com.wzc.mobileplayer.Service.MusicPlayerService;
 import com.wzc.mobileplayer.Utils.LyricParaser;
 import com.wzc.mobileplayer.Utils.Utils;
+import com.wzc.mobileplayer.View.BaseVisualizerView;
 import com.wzc.mobileplayer.View.LyricShowView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -55,6 +57,7 @@ public class SystemAudioPlayer extends Activity implements View.OnClickListener{
 
     private int position;
     private LyricShowView lyric_show_view;
+    private BaseVisualizerView baseVisualizerView;
 
     private MyReceiver receiver;
     /**
@@ -65,6 +68,7 @@ public class SystemAudioPlayer extends Activity implements View.OnClickListener{
     private Utils utils;
 
     private boolean notification;
+    private Visualizer mVisualizer;
 
 
     private IMusicPlayerService service;
@@ -159,6 +163,7 @@ public class SystemAudioPlayer extends Activity implements View.OnClickListener{
         bt_switch_lyric = (Button) findViewById(R.id.bt_switch_lyric);
         iv_icon = (ImageView) findViewById(R.id.iv_icon);
         lyric_show_view = (LyricShowView) findViewById(R.id.lyric_show_view);
+        baseVisualizerView = (BaseVisualizerView) findViewById(R.id.baseVisualizerView);
 
         iv_icon.setBackgroundResource(R.drawable.animation_list);
         AnimationDrawable drawable = (AnimationDrawable) iv_icon.getBackground();
@@ -356,6 +361,9 @@ public class SystemAudioPlayer extends Activity implements View.OnClickListener{
 //    private void showViewData() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showViewData(MediaItem mediaItem) {
+
+        setupVisualizerFxAndUi();
+
         try {
             tv_artist.setText(service.getArtistName());
             tv_name.setText(service.getAudioName());
@@ -395,5 +403,32 @@ public class SystemAudioPlayer extends Activity implements View.OnClickListener{
         }
     }
 
+    /**
+     * 生成一个VisualizerView对象 使音频频谱的波段能够反映到VisualizerView上
+     */
+    private void setupVisualizerFxAndUi() {
 
+        int audioSessionid = 0;
+        try {
+            audioSessionid = service.getAudioSessionId();
+        } catch (RemoteException e){
+            e.printStackTrace();
+        }
+        System.out.println("audioSessionid==" + audioSessionid);
+        mVisualizer = new Visualizer(audioSessionid);
+        // 参数内必须是2的位数
+        mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
+        // 设置允许波形表示 并且捕获它
+        baseVisualizerView.setVisualizer(mVisualizer);
+        mVisualizer.setEnabled(true);
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (isFinishing()){
+            mVisualizer.release();
+        }
+    }
 }

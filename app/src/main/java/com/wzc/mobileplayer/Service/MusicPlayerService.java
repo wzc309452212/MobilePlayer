@@ -108,6 +108,15 @@ public class MusicPlayerService extends Service {
         public String getAudioPath() throws RemoteException {
             return mediaItem.getData();
         }
+
+        @Override
+        public int getAudioSessionId() throws RemoteException {
+            return mediaPlayer.getAudioSessionId();
+        }
+
+//        public int getAudioSessionId() throws RemoteException {
+//            return mediaPlayer.getAudioSessionId();
+//        }
     };
 
     /**根据位置打开一个音频并且播放
