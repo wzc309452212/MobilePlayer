@@ -5,12 +5,15 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.FrameLayout;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -43,6 +46,7 @@ public class MainActivity extends FragmentActivity{
      */
     private BasePager tempBasePager;
 
+    private boolean isExit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,4 +200,26 @@ public class MainActivity extends FragmentActivity{
         return true;
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            if (position != 0){
+                // 选中首页
+                rg_bottom_tag.check(R.id.rb_video);
+                return true;
+            } else if (!isExit){
+                isExit = true;
+                Toast.makeText(this,"再按一次退出",Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        isExit = false;
+                    }
+                },2000);
+                return true;
+            }
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
 }
