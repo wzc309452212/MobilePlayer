@@ -275,6 +275,10 @@
             android:name=".Service.MusicPlayerService"
             android:enabled="true"
             android:exported="true"></service>
+
+        <activity android:name=".activity.SearchActivity"
+            android:launchMode="singleTask"
+            />
     </application>
 
 </manifest>

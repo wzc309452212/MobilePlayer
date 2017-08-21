@@ -1,12 +1,14 @@
 package com.wzc.mobileplayer.View;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.wzc.mobileplayer.R;
+import com.wzc.mobileplayer.activity.SearchActivity;
 
 /**
  * Created by Administrator on 2017/5/15.
@@ -60,7 +62,9 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.tv_search:
-                Toast.makeText(context, "搜索", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "搜索", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, SearchActivity.class);
+                context.startActivity(intent);
                 break;
             case R.id.rl_game:
                 Toast.makeText(context, "游戏", Toast.LENGTH_SHORT).show();
